@@ -53,6 +53,9 @@ public class CallbackServer {
             System.out.println("\n"+body);
 
             exchange.sendResponseHeaders(200, "OK".length());
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write("OK".getBytes());
+            }
         } catch (IOException e){
             throw new RuntimeException("Не удалось получить тело коллбэка", e);
         }

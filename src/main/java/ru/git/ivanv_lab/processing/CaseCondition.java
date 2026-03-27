@@ -5,22 +5,28 @@ import ru.git.ivanv_lab.model.Transport;
 
 public class CaseCondition {
     private int expectedHttpStatusCode;
-    private Status conditionErrorDescription;
+    private String conditionErrorDescription;
     private Transport conditionTransport;
     private Status conditionStatus;
 
-    public CaseCondition(int expectedHttpStatusCode, Status conditionErrorDescription, Transport conditionTransport, Status conditionStatus) {
+    public CaseCondition(int expectedHttpStatusCode, String conditionErrorDescription, Transport conditionTransport, Status conditionStatus) {
         this.expectedHttpStatusCode = expectedHttpStatusCode;
         this.conditionErrorDescription = conditionErrorDescription;
         this.conditionTransport = conditionTransport;
         this.conditionStatus = conditionStatus;
     }
 
+    public CaseCondition(int expectedHttpStatusCode, String conditionErrorDescription, Transport conditionTransport) {
+        this.expectedHttpStatusCode = expectedHttpStatusCode;
+        this.conditionErrorDescription = conditionErrorDescription;
+        this.conditionTransport = conditionTransport;
+    }
+
     public int getExpectedHttpStatusCode() {
         return expectedHttpStatusCode;
     }
 
-    public Status getConditionErrorDescription() {
+    public String getConditionErrorDescription() {
         return conditionErrorDescription;
     }
 

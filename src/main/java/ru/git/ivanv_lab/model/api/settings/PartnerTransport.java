@@ -2,6 +2,8 @@ package ru.git.ivanv_lab.model.api.settings;
 
 import ru.git.ivanv_lab.model.Transport;
 
+import static ru.git.ivanv_lab.BaseTest.fabric;
+
 public class PartnerTransport {
     private int id;
     private boolean multiSignature;
@@ -21,26 +23,27 @@ public class PartnerTransport {
         private boolean onModeration;
         private boolean templateOnly;
 
-        protected Builder withName(Transport transport){
-
+        public Builder withName(Transport transport){
+            id = fabric.getTransportId(transport.getName());
+            return this;
         }
 
-        protected Builder withMultiSignature(boolean active){
+        public Builder withMultiSignature(boolean active){
             this.multiSignature=active;
             return this;
         }
 
-        protected Builder withModeration(boolean active){
+        public Builder withModeration(boolean active){
             this.onModeration=active;
             return this;
         }
 
-        protected Builder withTemplateOnly(boolean active){
+        public Builder withTemplateOnly(boolean active){
             this.templateOnly=active;
             return this;
         }
 
-        protected PartnerTransport build(){
+        public PartnerTransport build(){
             return new PartnerTransport(this);
         }
     }

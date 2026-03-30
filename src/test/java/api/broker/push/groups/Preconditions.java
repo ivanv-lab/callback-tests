@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.git.ivanv_lab.api.ApiWorker;
+import ru.git.ivanv_lab.model.Transport;
 import ru.git.ivanv_lab.model.api.settings.Partner;
 import ru.git.ivanv_lab.model.api.settings.PartnerTransport;
 
@@ -47,11 +48,17 @@ public class Preconditions {
         Partner partner=new Partner.Builder()
                 .withName("PushPartner")
                 .withTransports(new PartnerTransport[]{
-                        new PartnerTransport.
+                        new PartnerTransport.Builder()
+                                .withName(Transport.PUSH)
+                                .withModeration(false)
+                                .withMultiSignature(false)
+                                .withTemplateOnly(false)
+                                .build()
                 })
                 .withPrepaid(false)
                 .withStatus(true)
                 .build();
+
 
     }
 

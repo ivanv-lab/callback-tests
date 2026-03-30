@@ -1,48 +1,39 @@
 package ru.git.ivanv_lab.db;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.postgresql.ds.PGConnectionPoolDataSource;
 import ru.git.ivanv_lab.data.PropertyProvider;
 
+import javax.sql.ConnectionPoolDataSource;
+import javax.sql.PooledConnection;
 import java.sql.*;
 
 public class SqlWorker {
-    private static final Logger log = LoggerFactory.getLogger(SqlWorker.class);
-    private static final String ORACLE_JDBC_URL = "jdbc:oracle:thin:@%s:1521:wsoft";
-    private static final String POSTGRES_JDBC_URL = "jdbc:postgresql://%s:5432/";
 
-    private final Connection connection;
+    private final ConnectionPoolDataSource dataSource;
 
     public SqlWorker(String username, String password, String dbName) {
-        Connection tempConn;
+        PGConnectionPoolDataSource source = new PGConnectionPoolDataSource();
+        source.setServerNames(new String[]{PropertyProvider.getBaseUrl()});
+        source.setDatabaseName(dbName);
+        source.setUser(username);
+        source.setPassword(password);
+        source.setPortNumbers(new int[]{5432});
 
+        dataSource = source;
+    }
+
+    private Connection getConnection() {
         try {
-            tempConn = tryOracleConnection(username, password, dbName);
-        } catch (SQLException oracleEx) {
-            try {
-                tempConn = tryPostgresConnection(username, password, dbName);
-            } catch (SQLException postgresEx) {
-                throw new RuntimeException("Ошибка подключения к БД", postgresEx);
-            }
+            PooledConnection pooledConnection = dataSource.getPooledConnection();
+            return pooledConnection.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-
-        this.connection = tempConn;
-    }
-
-    private Connection tryOracleConnection(String username, String password, String dbName) throws SQLException {
-        String url = String.format(ORACLE_JDBC_URL, PropertyProvider.getBaseUrl());
-        return DriverManager.getConnection(url, username, password);
-    }
-
-    private Connection tryPostgresConnection(String username, String password, String dbName) throws SQLException {
-        log.warn(dbName + username + password);
-        String url = String.format(POSTGRES_JDBC_URL, PropertyProvider.getBaseUrl()) + dbName;
-        return DriverManager.getConnection(url, username, password);
     }
 
     public ResultSet query(String query) {
         try {
-            Statement statement = connection.createStatement();
+            Statement statement = getConnection().createStatement();
             try {
                 return statement.executeQuery(query);
             } catch (SQLException e) {
@@ -54,7 +45,7 @@ public class SqlWorker {
     }
 
     public void executeQueryNonResult(String query) {
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = getConnection().createStatement()) {
             int res = statement.executeUpdate(query);
             if (res == 0) throw new SQLException("Запрос выполнен неудачно");
         } catch (SQLException e) {

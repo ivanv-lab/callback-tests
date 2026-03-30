@@ -10,7 +10,7 @@ import tools.jackson.databind.JsonNode;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCaseChecker {
 
@@ -67,7 +67,10 @@ public class TestCaseChecker {
         //Проверка отсутствия других лишних отправок
         Set<Transport> unexpectedTransports=getOtherTransports(expectedTransports);
         for(Transport unexpectedTransport:unexpectedTransports){
-
+            CallbackKey key=new CallbackKey(messageId,unexpectedTransport);
+            assertNull(CallbackServer.getCallBack(key), String.format("""
+                    Сообщение с ключом '%s' не должно существовать
+                    """, key));
         }
     }
 

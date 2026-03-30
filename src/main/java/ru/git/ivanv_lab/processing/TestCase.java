@@ -30,6 +30,14 @@ public class TestCase {
         return description;
     }
 
+    public CaseBody getCaseBody(){
+        return caseBody;
+    }
+
+    public List<CaseCondition> getCaseConditions(){
+        return caseConditions;
+    }
+
     public String logTestCase() {
         StringBuilder log = new StringBuilder(String.format("""
                 TestCase ID: %s
@@ -57,7 +65,7 @@ public class TestCase {
                     Transport: %s
                     Status: %s
                     """,
-                    i,
+                    i+1,
                     condition.getExpectedHttpStatusCode(),
                     condition.getConditionErrorDescription(),
                     condition.getConditionTransport(),

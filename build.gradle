@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group = 'ru.git.ivanv_lab'
@@ -11,7 +12,7 @@ repositories {
 
 dependencies {
     // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
+    implementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
     // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:6.0.3'
     // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
@@ -20,6 +21,19 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-params:6.0.3'
     // Source: https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
     testImplementation 'org.junit.platform:junit-platform-launcher:6.0.3'
+
+    // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-junit5
+    testImplementation 'io.qameta.allure:allure-junit5:2.33.0'
+
+    // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-java-commons
+    implementation 'io.qameta.allure:allure-java-commons:2.33.0'
+    // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments
+    implementation 'io.qameta.allure:allure-attachments:2.33.0'
+    // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-rest-assured
+    implementation 'io.qameta.allure:allure-rest-assured:2.33.0'
+
+    // Source: https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+    implementation 'io.rest-assured:rest-assured:6.0.0'
 
     // Source: https://mvnrepository.com/artifact/tools.jackson.core/jackson-databind
     implementation 'tools.jackson.core:jackson-databind:3.1.0'

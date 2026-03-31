@@ -13,6 +13,8 @@ import ru.git.ivanv_lab.model.Transport;
 import ru.git.ivanv_lab.model.api.settings.Partner;
 import ru.git.ivanv_lab.model.api.settings.PartnerTransport;
 
+import static ru.git.ivanv_lab.BaseTest.sqlFabric;
+
 @Epic("broker-api")
 @Feature("Группы Push-приложений. Предусловия")
 public class Preconditions extends BaseBrokerTests {
@@ -24,7 +26,6 @@ public class Preconditions extends BaseBrokerTests {
         Allure.step("Создание необходимых сущностей для тестирования Push-рассылок",
                 () -> {
                     Allure.step("Создание клиента", this::createClient);
-                    Allure.step("Добавление Custom в транспорты", this::addCustomTransport);
                     getPartnerId();
                     Allure.step("Создание аккаунта", this::createAccount);
                     Allure.step("Создание тарификации Push для клиента", this::createPushTariff);
@@ -42,6 +43,8 @@ public class Preconditions extends BaseBrokerTests {
                     Allure.step("Создание MN сервиса для клиента", this::createMailNotifyService);
                 });
     }
+
+    private static long partnerId;
 
     private void createClient() {
         Partner partner=new Partner.Builder()
@@ -61,16 +64,12 @@ public class Preconditions extends BaseBrokerTests {
         fabric.addPartner(partner);
     }
 
-    private void addCustomTransport() {
-
-    }
-
     private void getPartnerId() {
-
+        partnerId = sqlFabric.getPartnerId("PushPartner");
     }
 
     private void createAccount() {
-
+        Account account=new Account.Builder()
     }
 
     private void createPushTariff() {

@@ -58,32 +58,10 @@ public class SqlWorker {
         }
     }
 
-    private Connection getConnection() {
+    public Connection getConnection() {
         try {
             PooledConnection pooledConnection = dataSource.getPooledConnection();
             return pooledConnection.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public ResultSet query(String query) {
-        try {
-            Statement statement = getConnection().createStatement();
-            try {
-                return statement.executeQuery(query);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public void executeQueryNonResult(String query) {
-        try (Statement statement = getConnection().createStatement()) {
-            int res = statement.executeUpdate(query);
-            if (res == 0) throw new SQLException("Запрос выполнен неудачно");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

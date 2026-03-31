@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ApiWorker {
     private static final Logger log = LoggerFactory.getLogger(ApiWorker.class);
-    private final String baseURL = PropertyProvider.getBaseUrl();
+    private final String apiUrl = PropertyProvider.getApiUrl();
 
     private static ConcurrentHashMap<ApiContract, String> tokenMap = new ConcurrentHashMap<ApiContract, String>();
     private ThreadLocal<ApiContract> contract = new ThreadLocal<>();
@@ -37,7 +37,7 @@ public class ApiWorker {
     private void getToken(ApiContract contract) {
         try {
             String tempToken = null;
-            String url = baseURL + "/" + contract.apiName + "/auth";
+            String url = apiUrl + "/" + contract.apiName + "/auth";
 
             if (contract.apiName.equals("broker")) {
                 String toEncode = contract.login + ":" + contract.password;
@@ -80,7 +80,7 @@ public class ApiWorker {
                     .filter(new AllureRestAssured())
                     .header("Authorization", getTokenFromMap(contract.get()))
                     .contentType("application/json")
-                    .get(baseURL + url)
+                    .get(apiUrl + url)
                     .then()
                     .extract().response();
             resp.body().print();
@@ -102,7 +102,7 @@ public class ApiWorker {
                     .filter(new AllureRestAssured())
                     .header("Authorization", getTokenFromMap(contract.get()))
                     .contentType("application/json")
-                    .get(baseURL + url)
+                    .get(apiUrl + url)
                     .then()
                     .extract().response();
 
@@ -116,7 +116,7 @@ public class ApiWorker {
         Response resp = given()
                 .filter(new AllureRestAssured())
                 .header("Authorization", getTokenFromMap(contract.get()))
-                .get(baseURL + url)
+                .get(apiUrl + url)
                 .then()
                 .extract().response();
         resp.body().print();
@@ -133,7 +133,7 @@ public class ApiWorker {
                     .and()
                     .body(body)
                     .when()
-                    .put(baseURL + url)
+                    .put(apiUrl + url)
                     .then()
                     .extract().response();
             System.out.println("Ответ от api: ");
@@ -159,7 +159,7 @@ public class ApiWorker {
                     .and()
                     .body(body)
                     .when()
-                    .put(baseURL + url)
+                    .put(apiUrl + url)
                     .then()
                     .extract().response();
 
@@ -178,7 +178,7 @@ public class ApiWorker {
                     .and()
                     .body(body)
                     .when()
-                    .post(baseURL + url)
+                    .post(apiUrl + url)
                     .then()
                     .extract().response();
             resp.body().print();
@@ -203,7 +203,7 @@ public class ApiWorker {
                     .and()
                     .body(body)
                     .when()
-                    .post(baseURL + url)
+                    .post(apiUrl + url)
                     .then()
                     .extract().response();
 
@@ -222,7 +222,7 @@ public class ApiWorker {
                     .and()
                     .body(body)
                     .when()
-                    .patch(baseURL + url)
+                    .patch(apiUrl + url)
                     .then()
                     .extract().response();
             resp.body().print();
@@ -247,7 +247,7 @@ public class ApiWorker {
                     .and()
                     .body(body)
                     .when()
-                    .patch(baseURL + url)
+                    .patch(apiUrl + url)
                     .then()
                     .extract().response();
 
@@ -263,7 +263,7 @@ public class ApiWorker {
                     .filter(new AllureRestAssured())
                     .header("Authorization", getTokenFromMap(contract.get()))
                     .when()
-                    .delete(baseURL + url)
+                    .delete(apiUrl + url)
                     .then()
                     .extract().response();
             resp.body().print();
@@ -286,7 +286,7 @@ public class ApiWorker {
                     .filter(new AllureRestAssured())
                     .header("Authorization", getTokenFromMap(contract.get()))
                     .when()
-                    .delete(baseURL + url)
+                    .delete(apiUrl + url)
                     .then()
                     .extract().response();
 

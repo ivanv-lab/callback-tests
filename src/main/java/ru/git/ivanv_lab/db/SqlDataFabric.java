@@ -27,4 +27,18 @@ public class SqlDataFabric {
 
         return transportId;
     }
+
+    public long getPartnerId(String partnerName){
+        long partnerId=0;
+        try(ResultSet resultSet = workerThreadLocal.get()
+                .query(String.format("SELECT id from partners where name = '%s'",partnerName))){
+
+            if(resultSet.next())
+                partnerId = resultSet.getLong(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return partnerId;
+    }
 }

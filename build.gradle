@@ -11,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    //JUNIT
     // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     implementation 'org.junit.jupiter:junit-jupiter-api:6.0.3'
     // Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
@@ -22,9 +23,11 @@ dependencies {
     // Source: https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
     testImplementation 'org.junit.platform:junit-platform-launcher:6.0.3'
 
+    //REPORTS
     // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-junit5
     testImplementation 'io.qameta.allure:allure-junit5:2.33.0'
 
+    //REPORTS
     // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-java-commons
     implementation 'io.qameta.allure:allure-java-commons:2.33.0'
     // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-attachments
@@ -32,16 +35,21 @@ dependencies {
     // Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-rest-assured
     implementation 'io.qameta.allure:allure-rest-assured:2.33.0'
 
+    //API
     // Source: https://mvnrepository.com/artifact/io.rest-assured/rest-assured
     implementation 'io.rest-assured:rest-assured:6.0.0'
 
+    ///JSON
     // Source: https://mvnrepository.com/artifact/tools.jackson.core/jackson-databind
     implementation 'tools.jackson.core:jackson-databind:3.1.0'
     // Source: https://mvnrepository.com/artifact/com.github.javafaker/javafaker
     implementation 'com.github.javafaker:javafaker:1.0.2'
 
+    ///DATABASE
     // Source: https://mvnrepository.com/artifact/org.postgresql/postgresql
     implementation 'org.postgresql:postgresql:42.7.10'
+    // Source: https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc11
+    implementation 'com.oracle.database.jdbc:ojdbc11:23.26.1.0.0'
 }
 
 test {

@@ -6,5 +6,5 @@ import ru.git.ivanv_lab.db.SqlWorker;
 public class BaseTest {
 
     protected static SqlWorker worker=new SqlWorker("msg","msg","msg");
-    public static SqlDataFabric fabric=new SqlDataFabric(worker);
+    public static SqlDataFabric sqlFabric=new SqlDataFabric(worker);
 }

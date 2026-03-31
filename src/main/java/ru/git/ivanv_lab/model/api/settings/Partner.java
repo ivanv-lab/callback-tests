@@ -1,9 +1,15 @@
 package ru.git.ivanv_lab.model.api.settings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Partner {
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("transports")
     private PartnerTransport[] partnerTransports;
+    @JsonProperty("prepaid")
     private boolean prepaid;
+    @JsonProperty("status")
     private int status;
 
     public Partner(Builder builder){
@@ -11,6 +17,10 @@ public class Partner {
         this.partnerTransports= builder.partnerTransports;
         this.prepaid=builder.prepaid;
         this.status=builder.status;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public static class Builder{

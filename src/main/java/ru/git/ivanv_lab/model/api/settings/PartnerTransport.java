@@ -1,13 +1,18 @@
 package ru.git.ivanv_lab.model.api.settings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.git.ivanv_lab.model.Transport;
 
-import static ru.git.ivanv_lab.BaseTest.fabric;
+import static ru.git.ivanv_lab.BaseTest.sqlFabric;
 
 public class PartnerTransport {
+    @JsonProperty("id")
     private int id;
+    @JsonProperty("multisignature")
     private boolean multiSignature;
+    @JsonProperty("on_moderation")
     private boolean onModeration;
+    @JsonProperty("template_only")
     private boolean templateOnly;
 
     public PartnerTransport(Builder builder){
@@ -24,7 +29,7 @@ public class PartnerTransport {
         private boolean templateOnly;
 
         public Builder withName(Transport transport){
-            id = fabric.getTransportId(transport.getName());
+            id = sqlFabric.getTransportId(transport.getDbName());
             return this;
         }
 

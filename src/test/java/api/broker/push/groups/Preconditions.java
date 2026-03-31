@@ -1,5 +1,6 @@
 package api.broker.push.groups;
 
+import api.BaseBrokerTests;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -14,9 +15,7 @@ import ru.git.ivanv_lab.model.api.settings.PartnerTransport;
 
 @Epic("broker-api")
 @Feature("Группы Push-приложений. Предусловия")
-public class Preconditions {
-
-    private final ApiWorker worker = new ApiWorker("acapi", "admin@admin.com", "Admin");
+public class Preconditions extends BaseBrokerTests {
 
     @Execution(ExecutionMode.SAME_THREAD)
     @DisplayName("Подготовка сущностей")
@@ -59,7 +58,7 @@ public class Preconditions {
                 .withStatus(true)
                 .build();
 
-
+        fabric.addPartner(partner);
     }
 
     private void addCustomTransport() {

@@ -1,10 +1,10 @@
 package ru.git.ivanv_lab.processing;
 
+import ru.git.ivanv_lab.callback.CallbackGetter;
 import ru.git.ivanv_lab.callback.CallbackKey;
-import ru.git.ivanv_lab.callback.CallbackServer;
 import ru.git.ivanv_lab.exception.CallbackNotExistsException;
-import ru.git.ivanv_lab.model.Status;
-import ru.git.ivanv_lab.model.Transport;
+import ru.git.ivanv_lab.model.general.Status;
+import ru.git.ivanv_lab.model.general.Transport;
 import tools.jackson.databind.JsonNode;
 
 import java.util.HashSet;
@@ -13,6 +13,9 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestCaseChecker {
+
+    private final ThreadLocal<CallbackGetter> getterThreadLocal=
+            ThreadLocal.withInitial(CallbackGetter::new);
 
     public void checkCase(TestCase testCase) {
         String messageId = testCase.getCaseBody().getMessageId();
@@ -36,7 +39,7 @@ public class TestCaseChecker {
             //Проверка ошибки при удачной отправке: Recipient is in blacklist
             if(!errorDescription.isEmpty()){
                 callbackKey = new CallbackKey(messageId);
-                callbackNode = CallbackServer.getCallBack(callbackKey);
+                callbackNode = getterThreadLocal.get().getCallBack(callbackKey);
                 if(callbackNode==null) throw new CallbackNotExistsException(callbackKey);
 
                 String actualErrorDescription=callbackNode.get("Error description").asString();
@@ -52,14 +55,14 @@ public class TestCaseChecker {
             //Проверка отправки по Транспорту(Если статус = null)
             if (transport!=null && status==null){
                 callbackKey=new CallbackKey(messageId, transport);
-                callbackNode = CallbackServer.getCallBack(callbackKey);
+                callbackNode = getterThreadLocal.get().getCallBack(callbackKey);
                 if(callbackNode==null) throw new CallbackNotExistsException(callbackKey);
             }
 
             //Проверка отправки по Транспорту со Статусом
             if(transport!=null && status!=null){
                 callbackKey=new CallbackKey(messageId, transport, status);
-                callbackNode = CallbackServer.getCallBack(callbackKey);
+                callbackNode = getterThreadLocal.get().getCallBack(callbackKey);
                 if(callbackNode==null) throw new CallbackNotExistsException(callbackKey);
             }
         }
@@ -68,7 +71,7 @@ public class TestCaseChecker {
         Set<Transport> unexpectedTransports=getOtherTransports(expectedTransports);
         for(Transport unexpectedTransport:unexpectedTransports){
             CallbackKey key=new CallbackKey(messageId,unexpectedTransport);
-            assertNull(CallbackServer.getCallBack(key), String.format("""
+            assertNull(getterThreadLocal.get().getCallBack(key), String.format("""
                     Сообщение с ключом '%s' не должно существовать
                     """, key));
         }

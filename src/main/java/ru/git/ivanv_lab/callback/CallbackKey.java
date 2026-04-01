@@ -1,7 +1,7 @@
 package ru.git.ivanv_lab.callback;
 
-import ru.git.ivanv_lab.model.Status;
-import ru.git.ivanv_lab.model.Transport;
+import ru.git.ivanv_lab.model.general.Status;
+import ru.git.ivanv_lab.model.general.Transport;
 
 import java.io.Serializable;
 import java.util.Objects;

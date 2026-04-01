@@ -1,5 +1,8 @@
 package ru.git.ivanv_lab.db;
 
+import ru.git.ivanv_lab.model.general.Transport;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,6 +40,80 @@ public class SqlDataFabric {
         }
 
         return partnerId;
+    }
+
+    public long getAccountId(String accountName, long partnerId){
+        long accountId=0;
+        try(PreparedStatement statement=workerThreadLocal.get().getConnection()
+                .prepareStatement("SELECT id from accounts where name = ? and partner_id = ?")){
+
+            statement.setString(1, accountName);
+            statement.setLong(2, partnerId);
+
+            ResultSet rs=statement.executeQuery();
+            if(rs.next()) accountId=rs.getLong(1);
+            rs.close();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return accountId;
+    }
+
+    public int getProtocolId(String protocolName){
+        int protocolId=0;
+        try(PreparedStatement statement=workerThreadLocal.get().getConnection()
+                .prepareStatement("SELECT id from protocols where name = ?")){
+
+            statement.setString(1, protocolName);
+            ResultSet resultSet = statement.executeQuery();
+
+            if(resultSet.next()) protocolId = resultSet.getInt(1);
+            resultSet.close();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return protocolId;
+    }
+
+    public long getMessageTypeId(String messageTypeName){
+        long messageTypeId=0;
+        try(PreparedStatement statement=workerThreadLocal.get().getConnection()
+                .prepareStatement("SELECT id from message_types where name = ?")){
+
+            statement.setString(1, messageTypeName);
+            ResultSet rs=statement.executeQuery();
+
+            if(rs.next()) messageTypeId=rs.getLong(1);
+            rs.close();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return messageTypeId;
+    }
+
+    public long getTariffId(Transport transport, long partnerId){
+        long tariffId=0;
+        int transportId=getTransportId(transport.getDbName());
+
+        try(PreparedStatement statement=workerThreadLocal.get().getConnection()
+                .prepareStatement("SELECT id from tariffs where transport_id = ? " +
+                                  "and partner_id = ?")){
+
+            statement.setInt(1, transportId);
+            statement.setLong(2, partnerId);
+
+            ResultSet rs=statement.executeQuery();
+
+            if(rs.next()) tariffId=rs.getLong(1);
+            rs.close();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return tariffId;
     }
 
     public ResultSet query(String query) {

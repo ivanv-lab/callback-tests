@@ -1,4 +1,4 @@
-package ru.git.ivanv_lab.model;
+package ru.git.ivanv_lab.model.general;
 
 public enum Status {
     BUFFERED("buffered","Отложено(звонок)"),

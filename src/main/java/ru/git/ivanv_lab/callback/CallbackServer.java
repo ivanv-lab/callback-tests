@@ -2,8 +2,8 @@ package ru.git.ivanv_lab.callback;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import ru.git.ivanv_lab.model.Status;
-import ru.git.ivanv_lab.model.Transport;
+import ru.git.ivanv_lab.model.general.Status;
+import ru.git.ivanv_lab.model.general.Transport;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 

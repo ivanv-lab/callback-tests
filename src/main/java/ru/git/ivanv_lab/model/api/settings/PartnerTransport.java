@@ -1,7 +1,7 @@
 package ru.git.ivanv_lab.model.api.settings;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.git.ivanv_lab.model.Transport;
+import ru.git.ivanv_lab.model.general.Transport;
 
 import static ru.git.ivanv_lab.BaseTest.sqlFabric;
 

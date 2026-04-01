@@ -1,7 +1,7 @@
 package ru.git.ivanv_lab.processing;
 
-import ru.git.ivanv_lab.model.Status;
-import ru.git.ivanv_lab.model.Transport;
+import ru.git.ivanv_lab.model.general.Status;
+import ru.git.ivanv_lab.model.general.Transport;
 
 public class CaseCondition {
     private int expectedHttpStatusCode;

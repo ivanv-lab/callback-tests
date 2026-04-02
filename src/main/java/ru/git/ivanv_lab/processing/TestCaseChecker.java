@@ -39,7 +39,7 @@ public class TestCaseChecker {
             //Проверка ошибки при удачной отправке: Recipient is in blacklist
             if(!errorDescription.isEmpty()){
                 callbackKey = new CallbackKey(messageId);
-                callbackNode = getterThreadLocal.get().getCallBack(callbackKey);
+                callbackNode= getterThreadLocal.get().getCallBack(callbackKey);
                 if(callbackNode==null) throw new CallbackNotExistsException(callbackKey);
 
                 String actualErrorDescription=callbackNode.get("Error description").asString();
@@ -55,14 +55,14 @@ public class TestCaseChecker {
             //Проверка отправки по Транспорту(Если статус = null)
             if (transport!=null && status==null){
                 callbackKey=new CallbackKey(messageId, transport);
-                callbackNode = getterThreadLocal.get().getCallBack(callbackKey);
+                callbackNode=getterThreadLocal.get().getCallBack(callbackKey);
                 if(callbackNode==null) throw new CallbackNotExistsException(callbackKey);
             }
 
             //Проверка отправки по Транспорту со Статусом
             if(transport!=null && status!=null){
                 callbackKey=new CallbackKey(messageId, transport, status);
-                callbackNode = getterThreadLocal.get().getCallBack(callbackKey);
+                callbackNode=getterThreadLocal.get().getCallBack(callbackKey);
                 if(callbackNode==null) throw new CallbackNotExistsException(callbackKey);
             }
         }
@@ -83,7 +83,7 @@ public class TestCaseChecker {
 
         for(Transport expectedTransport:expectedTransports){
             for (Transport allTransport : allTransports) {
-                if (allTransport.equals(expectedTransport))
+                if (!allTransport.equals(expectedTransport))
                     otherTransports.add(allTransport);
             }
         }

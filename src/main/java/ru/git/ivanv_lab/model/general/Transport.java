@@ -1,5 +1,7 @@
 package ru.git.ivanv_lab.model.general;
 
+import java.util.Arrays;
+
 public enum Transport {
     SMS("sms", "SMS","СМС"),
     CALL("call", "Call","Звонок"),
@@ -17,6 +19,12 @@ public enum Transport {
         this.name = name;
         this.dbName=dbName;
         this.rusName = rusName;
+    }
+
+    public static Transport getFromName(String transportName){
+        return Arrays.stream(Transport.values())
+                .filter(transport -> transport.name.equals(transportName))
+                .findFirst().get();
     }
 
     public String getName(){

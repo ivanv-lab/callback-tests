@@ -59,11 +59,11 @@ public class CallbackServer {
                     .path("message-id")
                     .asString().toLowerCase();
 
-            Transport transport = Transport.valueOf(rootNode
+            Transport transport=Transport.getFromName(rootNode
                     .path("channel")
                     .asString().toLowerCase());
 
-            Status status = Status.valueOf(rootNode
+            Status status = Status.getFromName(rootNode
                     .path("status")
                     .asString().toLowerCase());
 
@@ -81,6 +81,8 @@ public class CallbackServer {
             if (pushAppName != null)
                 callBacks.put(new CallbackKey(messageId, transport, status, pushAppName), rootNode);
             else callBacks.put(new CallbackKey(messageId, transport, status), rootNode);
+
+            System.out.println("Коллбэк записан. Кол-во коллбэков = "+callBacks.size());
 
         } catch (IOException e) {
             throw new RuntimeException("Не удалось получить тело коллбэка", e);

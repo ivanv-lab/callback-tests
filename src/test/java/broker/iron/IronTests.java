@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import ru.git.ivanv_lab.api.ApiWorker;
-import ru.git.ivanv_lab.callback.CallbackGetter;
 import ru.git.ivanv_lab.model.general.Status;
 import ru.git.ivanv_lab.model.general.Transport;
 import ru.git.ivanv_lab.processing.CaseBody;

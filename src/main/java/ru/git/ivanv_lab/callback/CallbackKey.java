@@ -40,8 +40,9 @@ public class CallbackKey implements Serializable {
             return false;
         if(pattern.getStatus()!=null && !pattern.getStatus().equals(getStatus()))
             return false;
-        if(!pattern.getPushAppName().equals(getPushAppName()))
-            return false;
+        if(pattern.getPushAppName()!=null && pushAppName!=null)
+            if(!pattern.getPushAppName().equals(getPushAppName()))
+                return false;
 
         return true;
     }
@@ -83,7 +84,7 @@ public class CallbackKey implements Serializable {
     public String toString(){
         String stringKey=getMessageId()+"-"+getTransport()+"-"+getStatus();
         if(pushAppName!=null)
-            stringKey+=getPushAppName();
+            stringKey+="-"+getPushAppName();
 
         return stringKey;
     }

@@ -1,5 +1,7 @@
 package ru.git.ivanv_lab.model.general;
 
+import java.util.Arrays;
+
 public enum Status {
     BUFFERED("buffered","Отложено(звонок)"),
     DEFERRED("deferred","Отложено"),
@@ -20,6 +22,13 @@ public enum Status {
     Status(String name, String rusName){
         this.name=name;
         this.rusName=rusName;
+    }
+
+    public static Status getFromName(String statusName){
+        return Arrays.stream(Status.values())
+                .filter(status -> status.name.equals(statusName))
+                .findFirst()
+                .get();
     }
 
     public String getName() {

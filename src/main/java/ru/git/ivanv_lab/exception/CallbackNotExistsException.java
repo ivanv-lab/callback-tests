@@ -8,6 +8,6 @@ public class CallbackNotExistsException extends RuntimeException {
   }
 
   private static String message(CallbackKey key){
-    return String.format("Не найден коллбэк с ключом %s", key);
+    return String.format("Не найден коллбэк с ключом '%s'", key);
   }
 }

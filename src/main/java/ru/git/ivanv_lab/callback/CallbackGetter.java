@@ -4,13 +4,13 @@ import tools.jackson.databind.JsonNode;
 
 public class CallbackGetter {
 
-    public JsonNode getCallBack(CallbackKey key){
+    public synchronized JsonNode getCallBack(CallbackKey key){
         JsonNode callback=CallbackServer.getCallBack(key);
 
         for(int i=0;i<5;i++){
             if(callback==null){
                 try{
-                    wait(1000);
+                    wait(100);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

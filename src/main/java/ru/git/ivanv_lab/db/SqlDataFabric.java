@@ -116,6 +116,48 @@ public class SqlDataFabric {
         return tariffId;
     }
 
+    public long getTemplateId(String templateName, Transport transport){
+        long templateId=0;
+        int transportId=getTransportId(transport.getDbName());
+
+        try(PreparedStatement statement=workerThreadLocal.get().getConnection()
+                .prepareStatement("SELECT id from bulk_distr_templates " +
+                                  "where name = ? and is_visible = 1 and transport_id = ?")){
+
+            statement.setString(1, templateName);
+            statement.setInt(2, transportId);
+
+            ResultSet rs=statement.executeQuery();
+
+            if(rs.next()) templateId=rs.getLong(1);
+            rs.close();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return templateId;
+    }
+
+    public long getTemplateId(String templateName){
+        long templateId=0;
+
+        try(PreparedStatement statement=workerThreadLocal.get().getConnection()
+                .prepareStatement("SELECT id from bulk_distr_templates " +
+                                  "where name = ? and is_visible = 1")){
+
+            statement.setString(1, templateName);
+
+            ResultSet rs=statement.executeQuery();
+
+            if(rs.next()) templateId=rs.getLong(1);
+            rs.close();
+        } catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+
+        return templateId;
+    }
+
     public ResultSet query(String query) {
         try {
             Statement statement = workerThreadLocal

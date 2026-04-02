@@ -8,18 +8,22 @@ public class CaseCondition {
     private String conditionErrorDescription;
     private Transport conditionTransport;
     private Status conditionStatus;
+    private String[] pushAppName;
+
+    public CaseCondition(int expectedHttpStatusCode, String conditionErrorDescription, Transport conditionTransport, Status conditionStatus,
+                         String[] pushAppName) {
+        this.expectedHttpStatusCode = expectedHttpStatusCode;
+        this.conditionErrorDescription = conditionErrorDescription;
+        this.conditionTransport = conditionTransport;
+        this.conditionStatus = conditionStatus;
+        this.pushAppName=pushAppName;
+    }
 
     public CaseCondition(int expectedHttpStatusCode, String conditionErrorDescription, Transport conditionTransport, Status conditionStatus) {
         this.expectedHttpStatusCode = expectedHttpStatusCode;
         this.conditionErrorDescription = conditionErrorDescription;
         this.conditionTransport = conditionTransport;
         this.conditionStatus = conditionStatus;
-    }
-
-    public CaseCondition(int expectedHttpStatusCode, String conditionErrorDescription, Transport conditionTransport) {
-        this.expectedHttpStatusCode = expectedHttpStatusCode;
-        this.conditionErrorDescription = conditionErrorDescription;
-        this.conditionTransport = conditionTransport;
     }
 
     public int getExpectedHttpStatusCode() {
@@ -36,5 +40,9 @@ public class CaseCondition {
 
     public Status getConditionStatus() {
         return conditionStatus;
+    }
+
+    public String[] getPushAppName(){
+        return pushAppName;
     }
 }

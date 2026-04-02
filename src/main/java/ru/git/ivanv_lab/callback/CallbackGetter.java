@@ -10,7 +10,7 @@ public class CallbackGetter {
         for(int i=0;i<5;i++){
             if(callback==null){
                 try{
-                    wait(100);
+                    wait(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

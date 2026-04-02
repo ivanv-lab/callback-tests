@@ -82,9 +82,10 @@ public class CallbackKey implements Serializable {
 
     @Override
     public String toString(){
-        String stringKey=getMessageId()+"-"+getTransport()+"-"+getStatus();
-        if(pushAppName!=null)
-            stringKey+="-"+getPushAppName();
+        String stringKey=messageId;
+        if(transport!=null) stringKey+="-"+transport;
+        if(status!=null) stringKey+="-"+status;
+        if(pushAppName!=null) stringKey+="-"+pushAppName;
 
         return stringKey;
     }

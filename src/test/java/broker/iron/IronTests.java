@@ -15,18 +15,13 @@ import ru.git.ivanv_lab.processing.CaseBody;
 import ru.git.ivanv_lab.processing.CaseCondition;
 import ru.git.ivanv_lab.processing.TestCase;
 import ru.git.ivanv_lab.processing.TestCaseChecker;
+import ru.git.ivanv_lab.utils.datetime.DateTimeUtils;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.git.ivanv_lab.BaseTest.sqlFabric;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -955,22 +950,7 @@ public class IronTests extends BaseBrokerTests {
     @Description("3. Для теста подготовить несколько шаблонов по разным каналам, " +
                  "которые содержат переменные, которые не предлагает админка или ЛК. " +
                  "Эти переменные и параметры для их заполнения передаются в запросе.")
-    void ironThree() throws SQLException {
-//        String id = gen.genNumber(true);
-//        ResultSet resultSet = msg.query("SELECT * FROM BULK_DISTR_TEMPLATES \n" +
-//                                        "WHERE BULK_DISTR_TEMPLATES.NAME = 'IronTemplate'\n" +
-//                                        "AND BULK_DISTR_TEMPLATES.IS_VISIBLE=1");
-//        String recipient = "79100000002";
-//
-//        Map<String, String> statusMap = new HashMap<>();
-//        statusMap.put("testName", "ironThree");
-//        statusMap.put("id", id);
-//        statusMap.put("recipient", recipient);
-//        statusMap.put("statuses", "SMS-Transmitted,WhatsApp-Transmitted");
-//        statusMap.put("var1", "value");
-//        statusMap.put("var2", "значение");
-//        messageList.add(statusMap);
-
+    void ironThree() {
         TestCase testCaseSms = new TestCase(21, "3. Кастомные переменные",
                 "3. Для теста подготовить несколько шаблонов по разным каналам, " +
                 "которые содержат переменные, которые не предлагает админка или ЛК. " +
@@ -1155,12 +1135,12 @@ public class IronTests extends BaseBrokerTests {
                         { "recipient": "%s", "message-id": "%s" }
                     ]
                 }
-                """.formatted(now, nextWeek,
-                recipient1, id1,
-                recipient2, id2,
-                recipient3, id3,
-                recipient4, id4,
-                recipient6, id6);
+                """.formatted(DateTimeUtils.getDateTime(0, 0), DateTimeUtils.getDateTime(7, 0),
+                testCase1.getCaseBody().getRecipient(), testCase1.getCaseBody().getMessageId(),
+                testCase2.getCaseBody().getRecipient(), testCase2.getCaseBody().getMessageId(),
+                testCase3.getCaseBody().getRecipient(), testCase3.getCaseBody().getMessageId(),
+                testCase4.getCaseBody().getRecipient(), testCase4.getCaseBody().getMessageId(),
+                testCase5.getCaseBody().getRecipient(), testCase5.getCaseBody().getMessageId());
 
         api
                 .post("/broker-api/send", request)
@@ -1178,35 +1158,30 @@ public class IronTests extends BaseBrokerTests {
                  "(можно использовать те-же шаблоны и переменные, " +
                  "только передавать разные значения для них)"
     )
-    void ironFive() throws SQLException {
-        ResultSet resultSet = msg.query("SELECT ID FROM BULK_DISTR_TEMPLATES WHERE NAME='IronTemplate' AND BULK_DISTR_TEMPLATES.IS_VISIBLE=1");
-        assertTrue(resultSet.next());
-        String templateId = resultSet.getString(1);
-        resultSet = msg.query("SELECT NAME FROM transports WHERE id=(select transport_id from bulk_distr_templates where id='" + templateId + "')");
-        assertTrue(resultSet.next());
-        String transportName = resultSet.getString(1);
-        String recipient1 = "79100000004",
-                recipient2 = "79100000005";
-        String id1 = gen.genNumber(true);
-        String id2 = gen.genNumber(true);
+    void ironFive() {
+        String templateId = String.valueOf(sqlFabric.getTemplateId("IronTemplate", Transport.VIBER));
 
-        Map<String, String> statusMap = new HashMap<>();
-        statusMap.put("testName", "ironFive");
-        statusMap.put("id", id1);
-        statusMap.put("recipient", recipient1);
-        statusMap.put("statuses", transportName + "-Transmitted");
-        statusMap.put("var1", "PETR");
-        statusMap.put("var2", "KUZIN");
-        messageList.add(statusMap);
+        TestCase testCase1 = new TestCase(22, "5. Переменные",
+                "5. Отправка массовой рассылки по шаблону с переменными. " +
+                "Аналогично пункту 3, только сообщений несколько " +
+                "(можно использовать те-же шаблоны и переменные, " +
+                "только передавать разные значения для них)",
+                new CaseBody(gen.genNumber(), "79100000004", templateId),
+                List.of(
+                        new CaseCondition(200, "", Transport.VIBER, Status.TRANSMITTED)
+                ));
 
-        Map<String, String> statusMap2 = new HashMap<>();
-        statusMap2.put("testName", "ironFive");
-        statusMap2.put("id", id2);
-        statusMap2.put("recipient", recipient2);
-        statusMap2.put("statuses", transportName + "-Transmitted");
-        statusMap2.put("var1", "VLADIMIR");
-        statusMap2.put("var2", "NESTEROV");
-        messageList.add(statusMap2);
+        TestCase testCase2 = new TestCase(22, "5. Переменные",
+                "5. Отправка массовой рассылки по шаблону с переменными. " +
+                "Аналогично пункту 3, только сообщений несколько " +
+                "(можно использовать те-же шаблоны и переменные, " +
+                "только передавать разные значения для них)",
+                new CaseBody(gen.genNumber(), "79100000005", templateId),
+                List.of(
+                        new CaseCondition(200, "", Transport.VIBER, Status.TRANSMITTED)
+                ));
+
+        testCaseList.addAll(List.of(testCase1, testCase2));
 
         String request = """
                 {
@@ -1230,12 +1205,13 @@ public class IronTests extends BaseBrokerTests {
                         }
                     ]
                 }
-                """.formatted(templateId, recipient1, id1, recipient2, id2);
+                """.formatted(templateId,
+                testCase1.getCaseBody().getRecipient(), testCase1.getCaseBody().getMessageId(),
+                testCase2.getCaseBody().getRecipient(), testCase2.getCaseBody().getMessageId());
 
         api
                 .post("/broker-api/send", request)
                 .code(200);
-        resultSet.close();
     }
 
     @Order(1)
@@ -1250,15 +1226,29 @@ public class IronTests extends BaseBrokerTests {
                  "Затем его обновление после отправки "
     )
     synchronized void ironSix() throws InterruptedException {
-        String recipient = "79100000006";
-        String id = gen.genNumber(true);
+        String id = gen.genNumber();
 
-        Map<String, String> statusMap = new HashMap<>();
-        statusMap.put("testName", "ironSix");
-        statusMap.put("id", id);
-        statusMap.put("recipient", recipient);
-        statusMap.put("statuses", "SMS-Transmitted");
-        messageList.add(statusMap);
+        TestCase testCaseNow = new TestCase(24, "6.1. По дате",
+                "6.1. Отложенная отправка по дате. " +
+                "Делаем отложенную отправку на 5 минут от текущего времени. " +
+                "Сначала проверить формирование статуса Deferred (в статистике). " +
+                "Затем его обновление после отправки ",
+                new CaseBody(id, "79100000006", ""),
+                List.of(
+                        new CaseCondition(200, "", Transport.SMS, Status.DEFERRED)
+                ));
+
+        TestCase testCaseDeferred = new TestCase(24, "6.1. По дате",
+                "6.1. Отложенная отправка по дате. " +
+                "Делаем отложенную отправку на 5 минут от текущего времени. " +
+                "Сначала проверить формирование статуса Deferred (в статистике). " +
+                "Затем его обновление после отправки ",
+                new CaseBody(id, "79100000006", ""),
+                List.of(
+                        new CaseCondition(200, "", Transport.SMS, Status.TRANSMITTED)
+                ));
+
+        testCaseList.add(testCaseDeferred);
 
         String request = """
                 {
@@ -1283,7 +1273,10 @@ public class IronTests extends BaseBrokerTests {
                         }
                     ]
                 }
-                """.formatted(nowLDT.plusMinutes(5).format(formatter), nextWeek.formatted(hoursFormatter), recipient, id);
+                """.formatted(
+                DateTimeUtils.getDateTime(0,5),
+                DateTimeUtils.getDateTime(7,0),
+                testCaseNow.getCaseBody().getRecipient(), id);
 
         api
                 .post("/broker-api/send", request)
@@ -1291,8 +1284,7 @@ public class IronTests extends BaseBrokerTests {
 
         wait(10_000);
 
-        assertTrue(CallbackServer.getCallBack(new CallbackKey(id, "SMS", "Deferred")).path("messages").path(0)
-                .path("status").asText().equals("Deferred"));
+        checker.checkCase(testCaseNow);
     }
 
     @Order(1)
@@ -1305,15 +1297,33 @@ public class IronTests extends BaseBrokerTests {
                  "Делаем отложенную отправку на 5 минут от текущего времени. Сначала проверить формирование статуса Deferred (в статистике). Затем его обновление после отправки "
     )
     synchronized void ironSixDotTwo() throws InterruptedException {
-        String recipient = "79100000030";
-        String id = gen.genNumber(true);
+//        String recipient = "79100000030";
+//        String id = gen.genNumber(true);
+//
+//        Map<String, String> statusMap = new HashMap<>();
+//        statusMap.put("testName", "ironSixDotTwo");
+//        statusMap.put("id", id);
+//        statusMap.put("recipient", recipient);
+//        statusMap.put("statuses", "Viber-Delivered");
+//        messageList.add(statusMap);
+        String id = gen.genNumber();
+        TestCase testCaseNow=new TestCase(24,"6.2. По времени",
+                "6.2. Отложенная отправка по времени. " +
+                "Делаем отложенную отправку на 5 минут от текущего времени. Сначала проверить формирование статуса Deferred (в статистике). Затем его обновление после отправки ",
+                new CaseBody(id, "79100000030",""),
+                List.of(
+                        new CaseCondition(200,"",Transport.VIBER,Status.DEFERRED)
+                ));
 
-        Map<String, String> statusMap = new HashMap<>();
-        statusMap.put("testName", "ironSixDotTwo");
-        statusMap.put("id", id);
-        statusMap.put("recipient", recipient);
-        statusMap.put("statuses", "Viber-Delivered");
-        messageList.add(statusMap);
+        TestCase testCaseDeferred=new TestCase(24,"6.2. По времени",
+                "6.2. Отложенная отправка по времени. " +
+                "Делаем отложенную отправку на 5 минут от текущего времени. Сначала проверить формирование статуса Deferred (в статистике). Затем его обновление после отправки ",
+                new CaseBody(id, "79100000030",""),
+                List.of(
+                        new CaseCondition(200,"",Transport.VIBER,Status.DELIVERED)
+                ));
+
+        testCaseList.add(testCaseDeferred);
 
         String request = """
                 {
@@ -1339,7 +1349,8 @@ public class IronTests extends BaseBrokerTests {
                         }
                     ]
                 }
-                """.formatted(nowLDT.plusMinutes(5).format(hoursFormatter), recipient, id);
+                """.formatted(DateTimeUtils.getTime(5),
+                testCaseNow.getCaseBody().getRecipient(), id);
 
         api
                 .post("/broker-api/send", request)
@@ -1347,8 +1358,7 @@ public class IronTests extends BaseBrokerTests {
 
         wait(10_000);
 
-        assertTrue(CallbackServer.getCallBack(new CallbackKey(id, "Viber", "Deferred")).path("messages").path(0)
-                .path("status").asText().equalsIgnoreCase("Deferred"));
+        checker.checkCase(testCaseNow);
     }
 
     @Order(1)
@@ -1362,30 +1372,16 @@ public class IronTests extends BaseBrokerTests {
                  "Проверяем, что сформировался статус Deferred (в статистике)."
     )
     void ironSixDotThree() {
-        String recipient = "999613";
-        // Генерация уникального ID
-        String id = gen.genNumber(true);
+        TestCase testCase=new TestCase(25,"6.3. По дню недели",
+                "6.3. Отложенная отправка по дню недели. " +
+                "В этом сценарии указываем все дни недели, кроме текущего. " +
+                "Проверяем, что сформировался статус Deferred (в статистике).",
+                new CaseBody(gen.genNumber(), "999613", ""),
+                List.of(
+                        new CaseCondition(200,"",Transport.MAIL_NOTIFY,Status.DEFERRED)
+                ));
 
-        // Определяем текущий день недели
-        DayOfWeek currentDay = LocalDate.now().getDayOfWeek();
-
-        // Формируем строку с днями недели, исключая текущий день
-        StringBuilder allowedDays = new StringBuilder();
-        for (DayOfWeek day : DayOfWeek.values()) {
-            if (day != currentDay) {
-                if (!allowedDays.isEmpty()) {
-                    allowedDays.append(",");
-                }
-                allowedDays.append(day.toString().substring(0, 3).toUpperCase()); // Преобразуем в формат "MON", "TUE" и т.д.
-            }
-        }
-
-        Map<String, String> statusMap = new HashMap<>();
-        statusMap.put("testName", "ironSixDotThree");
-        statusMap.put("id", id);
-        statusMap.put("recipient", recipient);
-        statusMap.put("statuses", "Mail Notify-Deferred");
-        messageList.add(statusMap);
+        testCaseList.add(testCase);
 
         // Формируем JSON-запрос
         String request = """
@@ -1412,7 +1408,8 @@ public class IronTests extends BaseBrokerTests {
                             }
                         }
                     ]
-                }""".formatted(allowedDays.toString(), recipient, id);
+                }""".formatted(DateTimeUtils.getDays(false),
+                testCase.getCaseBody().getRecipient(), testCase.getCaseBody().getMessageId());
 
         api
                 .post("/broker-api/send", request)

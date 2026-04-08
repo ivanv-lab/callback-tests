@@ -13,8 +13,6 @@ public class CallbackKey implements Serializable {
     private Status status;
     private String pushAppName;
 
-    public CallbackKey(String messageId){this.messageId=messageId.toLowerCase();}
-
     public CallbackKey(String messageId, Transport transport){
         this.messageId = messageId.toLowerCase();
         this.transport = transport;
